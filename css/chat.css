@@ -1,0 +1,169 @@
+*{
+	-webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+}
+.chatWindow .users, .chatWindow .chatbox{
+	display:inline-block;
+	vertical-align:top;
+	margin: -1px;
+	position:relative;
+}
+.chatWindow .users{
+	background: #6AAEEC;
+	color: white;
+	width: 100px;
+	padding: 10px 15px;
+	overflow-y:auto;
+	height: 355px;
+}
+.chatWindow .chatbox{
+	color: black;
+	width: 400px;
+}
+.chatWindow .chatbox .login{
+	padding: 0px 20px;
+}
+.chatWindow .chatbox .topbar{
+	background: #ABC8F8;
+	padding: 5px 15px;
+}
+.chatWindow .chatbox .topbar #fullscreen{
+	float: right;
+	cursor: pointer;
+}
+.chatWindow .chatbox .chat {
+	display: none;
+	height: inherit;
+	background: #fff;
+}
+.chatWindow .chatbox .chat .msgs{
+	overflow-y: auto;
+	height: 300px;
+	margin-bottom: 30px;
+}
+.chatWindow .chatbox #msgForm{
+	position: absolute;
+	right: 0px;
+	left: 0px;
+	bottom: 0px;
+	padding: 4px 0px;
+	background: white;
+	box-shadow: 0px -4px 19px rgba(0,0,0,0.1);
+}
+.chatWindow .chatbox #msgForm *{
+	display: inline-block;
+	vertical-align: middle;
+	height: 20px;
+	width: 25px;
+}
+.chatWindow .chatbox #msgForm textarea{
+	width: 80%;
+	overflow: hidden;
+	border: 0px;
+	outline: none;
+}
+.chatWindow .chatbox #msgForm #voice{
+	background: url(../img/mic.png) no-repeat;
+	background-size: contain;
+	cursor: pointer;
+}
+.chatWindow .chatbox #msgForm #voice.active{
+	background: url(../img/mic-active.png) no-repeat;
+	background-size: contain;
+}
+.chatWindow .chatbox #msgForm #photo{
+	background: url(../img/camera.png) no-repeat;
+	background-size: contain;
+	cursor: pointer;
+}
+.chatWindow .error{
+	color:red;
+}
+.chatWindow .success{
+	color:green;
+}
+.chatWindow #audio{
+	display: none;
+}
+
+/**
+ * Making things beautiful
+ */
+.msg{
+	margin: 15px 5px;
+	padding: 5px 0px;
+	white-space: pre-line;
+	word-break: break-word;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+.msg .name{
+	display: inline-block;
+	vertical-align: top;
+	height: 30px;
+	width: 10%;
+	overflow: hidden;
+	font-size: 25px;
+	text-align: center;
+	text-transform: uppercase;
+}
+.msg .msgc{
+	display: inline-block;
+	vertical-align: top;
+	min-width: 100px;
+	width: 90%;
+	padding: 0px 10px;
+	line-height: 18px;
+}
+.msg .posted{
+	margin-top: 5px;
+	font-size: 12px;
+	color: #868686;
+}
+.msg .extra{
+	margin-top: 10px;
+}
+.msg .extra img{
+	max-width: 40%;
+	max-height: 40%;
+}
+.msg .extra audio{
+	width: 100%;
+}
+#load_earlier_messages{
+	display: block;
+	margin: 6px 10px;
+	padding: 4px 15px;
+	box-shadow: 0px 0px 2px rgba(0,0,0,.6);
+	cursor:pointer;
+}
+
+/**
+ * Fullscreen
+ */
+.chatWindow.fullscreen{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: white;
+	z-index: 9999;
+}
+.chatWindow.fullscreen .users{
+	height: 100%;
+	width: 15%;
+}
+.chatWindow.fullscreen .chatbox {
+	height: 100%;
+	width: 85%;
+}
+.chatWindow.fullscreen .chatbox .chat .msgs{
+	height: 91%;
+}
+.chatWindow.fullscreen .msg .name{
+	width: 6%;
+}
+.chatWindow.fullscreen .msg .msgc{
+	width: 94%;
+}

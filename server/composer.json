@@ -1,0 +1,5 @@
+{
+    "require": {
+        "francium/diffsocket": "^0.1.1"
+    }
+}
