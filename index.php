@@ -8,15 +8,16 @@
 		<script src="js/time.js"></script>
 		<script src="js/chat.js"></script>
 		<link href="css/chat.css" rel="stylesheet"/>
-		<title>Subin's Blog - subinsb.com</title>
+		<title>Subin's Blog - Advanced Live Group Chat</title>
 	</head>
 	<body>
 		<div id="content">
 			<center><h1>Advanced Live Group Chat</h1></center>
+			<p><a href="http://subinsb.com/php-websocket-advanced-chat">Tutorial</a></p>
 			<div class="chatWindow">
 				<div style="display: none;postion: absolute;">
 					<input type="file" id="photoFile" accept="image/*" />
-					<audio src="audio/message.wav" controls="false" id="notification"></audio>
+					<audio src="assets/message.wav" controls="false" id="notification"></audio>
 				</div>
 				<div class="users"></div>
 				<div class="chatbox">
