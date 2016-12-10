@@ -1,4 +1,6 @@
 <?php
+namespace Fr\DiffSocket\Service;
+
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
@@ -6,14 +8,14 @@ class AdvancedChatServer implements MessageComponentInterface {
 	protected $clients;
 	private $dbh;
 	private $users = array();
-	
+
 	public function __construct() {
 		global $dbh;
 		$this->clients = array();
 		$this->dbh = $dbh;
 		date_default_timezone_set('UTC');
 	}
-	
+
 	public function onOpen(ConnectionInterface $conn) {
 		$this->clients[$conn->resourceId] = $conn;
 		$this->checkOnliners($conn);
@@ -23,17 +25,17 @@ class AdvancedChatServer implements MessageComponentInterface {
 	public function onMessage(ConnectionInterface $conn, $data) {
 		$id	= $conn->resourceId;
 		$data = json_decode($data, true);
-		
+
 		if(isset($data['data']) && count($data['data']) != 0){
 			$type = $data['type'];
 			$user = isset($this->users[$id]) ? $this->users[$id] : false;
-			
+
 			if($type == "register"){
 				$name = htmlspecialchars($data['data']['name']);
 				if(array_search($name, $this->users) === false){
 					$this->users[$id] = $name;
 					$this->send($conn, "register", "success");
-					
+
 					$this->fetchMessages($conn);
 					$this->checkOnliners($conn);
 				}else{
@@ -49,19 +51,19 @@ class AdvancedChatServer implements MessageComponentInterface {
 				}else{
 					$base64 = null;
 				}
-				
+
 				if($data['data']['type'] == "text"){
 					$sql = $this->dbh->prepare("SELECT `id`, `user`, `msg`, `type` FROM `wsAdvancedChat` ORDER BY `id` DESC LIMIT 1");
 					$sql->execute();
 					$lastMsg = $sql->fetch(PDO::FETCH_ASSOC);
-					
+
 					if($lastMsg['user'] == $user && $lastMsg['type'] == "text"){
 						// Append message
 						$msg = $lastMsg['msg'] . "<br/>" . $msg;
-						
+
 						$sql = $this->dbh->prepare("UPDATE `wsAdvancedChat` SET `msg` = ?, `posted` = NOW() WHERE `id` = ?");
 						$sql->execute(array($msg, $lastMsg['id']));
-						
+
 						$id = $this->dbh->query("SELECT `id` FROM `wsAdvancedChat` ORDER BY `id` DESC LIMIT 1")->fetchColumn();
 						$return = array(
 							"id" => $id,
@@ -74,7 +76,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 					}else{
 						$sql = $this->dbh->prepare("INSERT INTO `wsAdvancedChat` (`user`, `msg`, `type`, `posted`) VALUES(?, ?, ?, NOW())");
 						$sql->execute(array($user, $msg, "text"));
-						
+
 						$id = $this->dbh->query("SELECT `id` FROM `wsAdvancedChat` ORDER BY `id` DESC LIMIT 1")->fetchColumn();
 						$return = array(
 							"id" => $id,
@@ -88,9 +90,9 @@ class AdvancedChatServer implements MessageComponentInterface {
 					$uploaded_file_name = $data['data']['file_name'];
 					$sql = $this->dbh->prepare("INSERT INTO `wsAdvancedChat` (`user`, `msg`, `type`, `file_name`, `posted`) VALUES(?, ?, ?, ?, NOW())");
 					$sql->execute(array($user, $msg, "img", $uploaded_file_name));
-					
+
 					$id = $this->dbh->query("SELECT `id` FROM `wsAdvancedChat` ORDER BY `id` DESC LIMIT 1")->fetchColumn();
-					
+
 					$return = array(
 						"id" => $id,
 						"name" => $user,
@@ -103,7 +105,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 					$uploaded_file_name = $data['data']['file_name'];
 					$sql = $this->dbh->prepare("INSERT INTO `wsAdvancedChat` (`user`, `msg`, `type`, `file_name`, `posted`) VALUES(?, ?, ?, ?, NOW())");
 					$sql->execute(array($user, $msg, "audio", $uploaded_file_name));
-					
+
 					$id = $this->dbh->query("SELECT `id` FROM `wsAdvancedChat` ORDER BY `id` DESC LIMIT 1")->fetchColumn();
 					$return = array(
 						"id" => $id,
@@ -114,7 +116,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 						"posted" => date("Y-m-d H:i:s")
 					);
 				}
-				
+
 				foreach($this->clients as $client){
 					$this->send($client, "single", $return);
 				}
@@ -144,7 +146,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 		$conn->close();
 		$this->checkOnliners();
 	}
-	
+
 	/**
 	 * My custom functions
 	 */
@@ -157,7 +159,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 			if($msgCount > 5){
 				$msgs = array_slice($msgs, $msgCount - 5, $msgCount);
 			}
-		
+
 			foreach($msgs as $msg){
 				$return = array(
 					"id" => $msg['id'],
@@ -178,7 +180,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 			$sql = $this->dbh->prepare("SELECT * FROM `wsAdvancedChat` WHERE `id` < :id ORDER BY `id` DESC LIMIT 10");
 			$sql->bindParam(":id", $id, PDO::PARAM_INT);
 			$sql->execute();
-			
+
 			$msgs = $sql->fetchAll();
 			foreach($msgs as $msg){
 				$return = array(
@@ -201,8 +203,8 @@ class AdvancedChatServer implements MessageComponentInterface {
 			}
 		}
 	}
-	
-	public function checkOnliners(ConnectionInterface $conn){		
+
+	public function checkOnliners(ConnectionInterface $conn){
 		/**
 		 * Send online users to everyone
 		 */
@@ -211,7 +213,7 @@ class AdvancedChatServer implements MessageComponentInterface {
 			$this->send($client, "onliners", $data);
 		}
 	}
-	
+
 	public function send(ConnectionInterface $client, $type, $data){
 		$send = array(
 			"type" => $type,

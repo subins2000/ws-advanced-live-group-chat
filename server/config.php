@@ -6,7 +6,7 @@ if( !isset($dbh) ){
   session_start();
   date_default_timezone_set("UTC");
   $musername = "root";
-  $mpassword = "password";
+  $mpassword = "backstreetboys";
   $hostname  = "127.0.0.1";
   $dbname    = "test";
   $port      = "3306";
