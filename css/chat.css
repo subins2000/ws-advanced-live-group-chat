@@ -64,16 +64,16 @@
 	outline: none;
 }
 .chatWindow .chatbox #msgForm #voice{
-	background: url(../img/mic.png) no-repeat;
+	background: url(../assets/mic.png) no-repeat;
 	background-size: contain;
 	cursor: pointer;
 }
 .chatWindow .chatbox #msgForm #voice.active{
-	background: url(../img/mic-active.png) no-repeat;
+	background: url(../assets/mic-active.png) no-repeat;
 	background-size: contain;
 }
 .chatWindow .chatbox #msgForm #photo{
-	background: url(../img/camera.png) no-repeat;
+	background: url(../assets/camera.png) no-repeat;
 	background-size: contain;
 	cursor: pointer;
 }
